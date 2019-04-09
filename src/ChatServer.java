@@ -84,15 +84,14 @@ public class ChatServer implements Runnable{
                         
                         //Réception des messages avec la clé partagée
                        
-                    //    cipher.init(Cipher.DECRYPT_MODE, key);
+                     //   cipher.init(Cipher.DECRYPT_MODE, key);
 	               
-                      //  byte[] res2 = cipher.doFinal(Base64.decode(talk));
+                     //   byte[] res2 = cipher.doFinal(Base64.decode(talk));
 	                
                      //   String res_str2 =  new String(res2);
                         
-                     //   out.println("message :");
-                     //   out.println(res_str2.replace("\n",""));
-                      //  out.flush();
+                     //   System.out.println("message :");
+                     //   System.out.println(res_str2);
                         
                         
 			while(doRun)
