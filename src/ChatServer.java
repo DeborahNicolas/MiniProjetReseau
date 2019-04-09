@@ -73,11 +73,11 @@ public class ChatServer implements Runnable{
                         String res_str =  Base64.encode(res);//new String(res);
                         
                         
-                        System.out.println("cle partagee codee : " + res);
+                        System.out.println("cle partagee codee : " + res_str);
                         
                         //Envoi de ma clé partagée codée
                         
-                        out.println(res);
+                        out.println(res_str.replace("\n",""));
                         //Oblige le message à s'envoyer dessuite
                         out.flush();
                         

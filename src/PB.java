@@ -14,6 +14,7 @@ import javax.crypto.*;
 import javax.crypto.spec.*;
 
 import com.sun.org.apache.xml.internal.security.utils.Base64;
+import java.security.spec.X509EncodedKeySpec;
 
 import java.util.Base64.*;
 
@@ -26,7 +27,7 @@ public class PB {
 	String secKey = "ubutru";   //a modifier
     
     
-	public static void main(String[] args) throws NoSuchAlgorithmException{
+	public static void main(String[] args) throws NoSuchAlgorithmException, InvalidKeyException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, Base64DecodingException{
 		InetAddress addr;
 		Socket client;
 		PrintWriter out;
@@ -75,11 +76,44 @@ public class PB {
 				doRun = false;
 			}else
 			{
+                            input = in.readLine();
+                            while(input == null) input = in.readLine();
+                            //On déchiffre la clé partagée reçue
+                                        
+                                        
+                                        // creer un autre cipher et l'initialiser avec la cle privee et mode dechiffrement
+                                        Cipher decryptCipher = Cipher.getInstance("RSA");
+                                        decryptCipher.init(Cipher.DECRYPT_MODE, pair.getPrivate());
+
+                                      // dechiffrer encoded
+                                        
+                                        
+                                        byte[] tobytes = decryptCipher.doFinal(Base64.decode(input));
+                                        
+                                        SecretKey originalKey = new SecretKeySpec(tobytes, 0, tobytes.length, "AES");
+                                        
+                                        System.out.println("next line is original text:");
+                                        System.out.println(new String(tobytes));
+                                        System.out.println(originalKey);
+                            
+                        }
+                        input=null;
 				while(doRun){
 					input = in.readLine();
 					while(input == null) input = in.readLine();
+                                        
+                                        
 					
 					System.out.println(input);
+                                        
+                                        System.out.println("clé partagée reçue");
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
 					if(input.compareToIgnoreCase("bye")==0)
 					{
 						System.out.println("client shutting down from server request");
@@ -100,7 +134,7 @@ public class PB {
 						
 					}
 				}
-			}
+			
 			client.close();
 			k.close();
 		}catch(UnknownHostException e){
