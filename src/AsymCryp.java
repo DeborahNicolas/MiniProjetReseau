@@ -37,13 +37,13 @@ public static void main(String[] args) {
 		    String encoded = java.util.Base64.getEncoder().encodeToString(cipherText);
 		    
 		    // cr�er un autre cipher et l'initialiser avec la cl� priv�e et mode d�chiffrement
-		    Cipher decryptCipher = Cipher.getInstance(spec);
-		    decryptCipher.init(Cipher.DECRYPT_MODE, pair.getPrivate());
-		    
-		    // d�chiffrer encoded
-		    byte[] tobytes = decryptCipher.doFinal(java.util.Base64.getDecoder().decode(encoded));
-		    System.out.println("next line is original text:");
-		    System.out.println(new String(tobytes));
+                        Cipher decryptCipher = Cipher.getInstance(spec);
+                        decryptCipher.init(Cipher.DECRYPT_MODE, pair.getPrivate());
+
+                        // d�chiffrer encoded
+                        byte[] tobytes = decryptCipher.doFinal(java.util.Base64.getDecoder().decode(encoded));
+                        System.out.println("next line is original text:");
+                        System.out.println(new String(tobytes));
 		    
 		    /////////////////////////////////////////////////////////////////////
 		    

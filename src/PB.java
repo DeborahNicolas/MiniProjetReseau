@@ -61,9 +61,9 @@ public class PB {
 			userInput = k.nextLine();
                         encodePK = Base64.encode(clePu.getEncoded());
                         
-			out.println(encodePK);
+			out.println(encodePK.replace("\n",""));
 			out.flush();
-			System.out.println("done");
+			//System.out.println(encodePK);
                         
                        
                         

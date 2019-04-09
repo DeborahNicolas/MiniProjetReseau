@@ -5,6 +5,12 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.security.KeyFactory;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.Scanner;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
@@ -46,14 +52,34 @@ public class ChatServer implements Runnable{
                         
                         System.out.println("cle partagee : " + key);
                         
-                        //On chiffre la clé partagée 
+                       // System.out.println(talk);
                         
-                        Cipher cipher = Cipher.getInstance("AES");
-                        cipher.init(Cipher.ENCRYPT_MODE, key);
-                        byte[] res = cipher.doFinal(talk.getBytes());
+                        //transformer talk en cle publique
+                        
+                        byte[] decodedKey = Base64.decode(talk);
+		    X509EncodedKeySpec speci =  new X509EncodedKeySpec(decodedKey);
+		    KeyFactory kf = KeyFactory.getInstance("RSA");
+		    PublicKey pk =  kf.generatePublic(speci);
+                        
+                    
+                    //On chiffre la clé partagée 
+                    //On utilise l'algo RSA
+                    //initialiser cypher avec cle publique
+                        
+                   
+                        Cipher cipher = Cipher.getInstance("RSA");
+                        cipher.init(Cipher.ENCRYPT_MODE, pk);
+                        byte[] res = cipher.doFinal(key.getEncoded());
                         String res_str =  Base64.encode(res);//new String(res);
                         
-                        System.out.println("cle partagee codee : " + res_str);
+                        
+                        System.out.println("cle partagee codee : " + res);
+                        
+                        //Envoi de ma clé partagée codée
+                        
+                        out.println(res);
+                        //Oblige le message à s'envoyer dessuite
+                        out.flush();
                         
 			while(doRun)
 			{
@@ -78,6 +104,7 @@ public class ChatServer implements Runnable{
 						doRun = false;
 					}else
 						talk = in.readLine();	
+                                                
 				}
 			}
 			s.close();
