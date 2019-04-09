@@ -59,6 +59,9 @@ public class PB {
 			out = new PrintWriter(client.getOutputStream(), true);
 			
 			System.out.print("enter msg> ");
+                        
+                       
+                        
 			userInput = k.nextLine();
                         encodePK = Base64.encode(clePu.getEncoded());
                         
@@ -93,8 +96,21 @@ public class PB {
                                         SecretKey originalKey = new SecretKeySpec(tobytes, 0, tobytes.length, "AES");
                                         
                                         System.out.println("next line is original text:");
-                                        System.out.println(new String(tobytes));
+                                   //     System.out.println(new String(tobytes));
                                         System.out.println(originalKey);
+                                        
+                                        
+                                        //Envoi de messages codés avec la clé partagée
+                                        
+                                         Cipher cipher = Cipher.getInstance("AES");
+                                        cipher.init(Cipher.ENCRYPT_MODE, originalKey);
+                                        byte[] res = cipher.doFinal(valueEnc.getBytes());
+                                        String res_str =  Base64.encode(res);//new String(res);
+                                        
+                                        out.println(res_str.replace("\n",""));
+                                        out.flush();
+                                        
+                                        
                             
                         }
                         input=null;
