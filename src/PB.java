@@ -1,3 +1,4 @@
+import com.sun.org.apache.xml.internal.security.exceptions.Base64DecodingException;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -25,7 +26,7 @@ public class PB {
 	String secKey = "ubutru";   //a modifier
     
     
-	public static void main(String[] args) {
+	public static void main(String[] args) throws NoSuchAlgorithmException{
 		InetAddress addr;
 		Socket client;
 		PrintWriter out;
@@ -35,19 +36,38 @@ public class PB {
 		boolean doRun = true;
                 String encryptedVal = null; //sera rempli par la suite
 		String valueEnc = "aazzaa"; //a modifier avec le message de la clé partagée
-		
+		String encodePK = null;
 		
 		Scanner k = new Scanner(System.in);
 		try{
+                    
+                        //Generer paire de cles RSA
+                    KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
+		    generator.initialize(2048, new SecureRandom());
+		    KeyPair pair = generator.generateKeyPair();
+                    
+                    
+                    //Recuperer cle publique et l'envoyer
+                    
+                    PublicKey clePu = pair.getPublic();
+                    
+                    
+                    
 			client = new Socket("localhost", 4444);
 			in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 			out = new PrintWriter(client.getOutputStream(), true);
 			
 			System.out.print("enter msg> ");
 			userInput = k.nextLine();
-			out.println(userInput);
+                        encodePK = Base64.encode(clePu.getEncoded());
+                        
+			out.println(encodePK);
 			out.flush();
 			System.out.println("done");
+                        
+                       
+                        
+                        
 			
 			if(userInput.compareToIgnoreCase("bye")==0)
 			{
@@ -70,6 +90,8 @@ public class PB {
 						userInput = k.nextLine();
 						out.println(userInput);
 						out.flush();
+                                                
+                                      
 						if(userInput.compareToIgnoreCase("bye")==0)
 						{
 							System.out.println("shutting down");
